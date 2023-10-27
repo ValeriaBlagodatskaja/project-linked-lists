@@ -70,18 +70,18 @@ class LinkedList {
       return;
     }
     const newNode = new Node(value);
-    let current, previous;
+    let pointer, previous;
 
-    //Set current first
-    current = this.head;
+    //Set pointer first
+    pointer = this.head;
     let count = 0;
 
     while (count < index) {
-      previous = current; //Node before index
+      previous = pointer; //Node before index
       count++;
-      current = current.nextNode;
+      pointer = pointer.nextNode;
     }
-    newNode.nextNode = current;
+    newNode.nextNode = pointer;
     previous.nextNode = newNode;
 
     this.size++;
@@ -91,22 +91,73 @@ class LinkedList {
     if (index < 0 || index > this.size) {
       return;
     }
-    let current = this.head;
+    let pointer = this.head;
     let previous;
     let count = 0;
 
     //Remove first
     if (index === 0) {
-      this.head = current.nextNode;
+      this.head = pointer.nextNode;
     } else {
       while (count < index) {
         count++;
-        previous = current;
-        current = current.nextNode;
+        previous = pointer;
+        pointer = pointer.nextNode;
       }
-      previous.nextNode = current.nextNode;
+      previous.nextNode = pointer.nextNode;
     }
     this.size--;
+  }
+
+  //Removes the last element from list
+
+  pop() {
+    let currPointer = this.head;
+    let nextPointer = this.head.nextNode;
+
+    if (!this.head) {
+      return null;
+    }
+    while (nextPointer.nextNode !== null) {
+      currPointer = currPointer.nextNode;
+      nextPointer = nextPointer.nextNode;
+    }
+    const returnNode = nextPointer;
+    currPointer.nextNode = null;
+    this.size--;
+    return returnNode;
+  }
+
+  contains(value) {
+    let pointer = this.head;
+    while (pointer !== null) {
+      if (value === pointer.value) return true;
+      pointer = pointer.nextNode;
+    }
+    return false;
+  }
+
+  find(value) {
+    let indexCount = 0;
+    let pointer = this.head;
+    while (pointer !== null) {
+      if (value === pointer.value) return indexCount;
+      pointer = pointer.nextNode;
+      indexCount++;
+    }
+    return null;
+  }
+
+  toString() {
+    let output = "";
+    let pointer = this.head;
+
+    while (pointer !== null) {
+      output += `( ${pointer.value} ) -> `;
+      pointer = pointer.nextNode;
+    }
+    output += "null";
+    return output;
   }
 
   printList() {
@@ -124,11 +175,15 @@ list.append(5);
 list.append(8);
 list.append(10);
 list.prepend(20);
-//list.insertAt(500, 2);
+list.insertAt(500, 2);
 
-list.removeAt(3);
+list.removeAt();
+list.pop();
 list.printList();
-//list.at(1);
-//console.log(list.size);
-//console.log(list.head);
-//list.tail();
+console.log(list.toString());
+console.log(list.find(200));
+list.at(1);
+console.log(list.contains(8));
+console.log(list.size);
+console.log(list.head);
+list.tail();
